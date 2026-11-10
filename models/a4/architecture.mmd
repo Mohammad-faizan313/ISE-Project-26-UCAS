@@ -1,0 +1,8 @@
+flowchart LR
+  P[Patient browser] --> API[FastAPI routes]
+  R[Receptionist browser] --> API
+  API --> AUTH[Authentication and authorization]
+  AUTH --> OPS[Booking / check-in / queue / call]
+  OPS --> DB[(SQLite transaction and constraints)]
+  MODEL[A2 pure domain model] -. specification layer .-> TESTS[36 domain tests]
+  API -. integration verification .-> TESTS2[24 API tests]

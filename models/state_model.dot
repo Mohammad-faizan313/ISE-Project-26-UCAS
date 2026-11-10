@@ -1,0 +1,31 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.15", nodesep="0.30", ranksep="0.50", fontname="Arial", label="Separate Appointment and Queue lifecycles", labelloc=t, fontsize=18];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=9, color="#50718d", fillcolor="#edf4f8", margin="0.12,0.08"];
+  edge [fontname="Arial", fontsize=8, color="#5d6a73", arrowsize=0.7];
+  subgraph cluster_a {
+    label="Appointment lifecycle"; color="#9ab3c6"; style="rounded";
+    confirmed [label="CONFIRMED", fillcolor="#dfeafa", color="#3f6b9a"];
+    cancelled [label="CANCELLED", fillcolor="#fff1eb", color="#bc725b"];
+    checkedin [label="CHECKED_IN", fillcolor="#e3f2eb", color="#4e8b72"];
+    noshow [label="NO_SHOW", fillcolor="#fff1eb", color="#bc725b"];
+    completed [label="COMPLETED", fillcolor="#e5e7eb", color="#6b7280"];
+    confirmed -> cancelled [label="cancel accepted"];
+    confirmed -> checkedin [label="check-in accepted"];
+    confirmed -> noshow [label="threshold + authorised resolution"];
+    checkedin -> completed [label="visit closed"];
+  }
+  subgraph cluster_q {
+    label="Queue-ticket lifecycle"; color="#9ab3c6"; style="rounded";
+    waiting [label="WAITING", fillcolor="#dfeafa", color="#3f6b9a"];
+    called [label="CALLED", fillcolor="#fff6df", color="#b9974d"];
+    consult [label="IN_CONSULTATION", fillcolor="#e3f2eb", color="#4e8b72"];
+    finished [label="FINISHED", fillcolor="#e5e7eb", color="#6b7280"];
+    withdrawn [label="WITHDRAWN", fillcolor="#fff1eb", color="#bc725b"];
+    waiting -> called [label="authorised call-next"];
+    called -> consult [label="visit starts"];
+    consult -> finished [label="visit ends"];
+    waiting -> withdrawn [label="authorised correction"];
+    called -> waiting [label="return to queue"];
+  }
+  checkedin -> waiting [style=dashed, label="valid ticket issued", color="#4e8b72"];
+}

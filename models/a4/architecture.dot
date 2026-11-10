@@ -1,0 +1,20 @@
+digraph A4Architecture {
+  rankdir=LR; graph [fontname="Arial", labelloc=t, label="A4 Prototype Architecture", fontsize=18];
+  node [shape=box, style="rounded,filled", fillcolor="#eef5fa", color="#3e6b86", fontname="Arial", fontsize=10];
+  edge [color="#526d7a", fontname="Arial", fontsize=9];
+  patient [label="Patient browser\nstatic/index.html"];
+  receptionist [label="Receptionist browser\nstatic/index.html"];
+  api [label="FastAPI routes\napp/main.py"];
+  auth [label="Authentication + role/owner checks\nPBKDF2 / token hash"];
+  service [label="Application operations\nbooking · check-in · queue · call"];
+  db [shape=cylinder, label="SQLite persistence\nusers · sessions · appointments\ntickets · idempotency"];
+  domain [label="A2 domain reference model\nsrc/clinic_model.py\nseparate specification/test layer", fillcolor="#fff4df", color="#a47b36"];
+  tests [label="Automated verification\n36 A2 + 24 A4 tests", fillcolor="#edf7ed", color="#50835a"];
+  patient -> api [label="HTTPS in production / HTTP local demo"];
+  receptionist -> api;
+  api -> auth;
+  auth -> service;
+  service -> db [label="transaction + constraints"];
+  domain -> tests [style=dashed, label="pure rule tests"];
+  api -> tests [style=dashed, label="API integration tests"];
+}

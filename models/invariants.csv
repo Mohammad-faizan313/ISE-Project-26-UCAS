@@ -1,0 +1,7 @@
+ID,Invariant,Valid example,Violating example,Automated check area,Limit
+I1,Window has aware start/end and start < end,09:00–11:00 with timezone,09:00–09:00; reversed interval; naive timestamp,TestInvariantI1Window,Does not establish a clinic-approved window policy
+I2,Appointment state and check-in/no-show timestamps are coherent,CONFIRMED with no check-in timestamp,CHECKED_IN without checked_in_at; NO_SHOW with accepted check-in,TestInvariantI2AppointmentCoherence,Limited to fields in reference model
+I3,An appointment has no more than one active queue ticket,One WAITING ticket for an accepted check-in,Two WAITING/CALLED tickets for same appointment,TestInvariantI3Tickets,Persistence-level concurrency still needs testing
+I4,Ticket issuance requires accepted check-in and no active ticket,CHECKED_IN appointment with no existing active ticket,Create ticket for CONFIRMED appointment or create duplicate active ticket,TestInvariantI3Tickets,Reference guard is not a transactional database guarantee
+I5,"No-show requires confirmed state, no check-in, expired grace, authorised role",Receptionist reconciles at/after configured threshold,Patient role or attempt before threshold,TestInvariantI4NoShowAuthorization,Role list and threshold need clinic approval
+I6,Queue state transitions follow the allowed transition graph,WAITING -> CALLED,FINISHED -> WAITING; WITHDRAWN -> CALLED,TestInvariantI5TicketTransitions,Does not model every clinic exception

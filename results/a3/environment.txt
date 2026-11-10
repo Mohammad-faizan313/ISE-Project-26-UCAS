@@ -1,0 +1,9 @@
+A3 investigated baseline
+Git tag: ise-a2-v1.0
+Commit: e8612772f9a145de60bbaf288b43950ae64d59d6
+Python: 3.13.5
+Baseline architecture: pure Python domain reference model; no API, UI or database adapter in the A2 snapshot.
+Compile command: python -m compileall -q src tests
+Test command: python -m unittest discover -s tests -v
+Observed baseline tests: 36 passed, 0 failures, 0 errors.
+Core A2 model/test runtime uses the Python standard library.

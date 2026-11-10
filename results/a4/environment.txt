@@ -1,0 +1,18 @@
+A4 verification environment
+Python: 3.13.5
+Platform: Linux x86_64 (glibc 2.41)
+fastapi: 0.128.2
+starlette: 0.50.0
+pydantic: 2.13.5
+pydantic-core: 2.46.5
+uvicorn: 0.48.0
+httpx: 0.28.1
+httpcore: 1.0.9
+SQLite: Python standard-library sqlite3
+Clinic queue day: fixed Asia/Shanghai UTC+08:00
+Compile command: python -m compileall -q app src tests (exit code 0)
+Test command: python -m unittest discover -s tests -v
+Observed: 60 tests run, 60 passed, 0 failures, 0 errors.
+Live smoke: GET /health HTTP 200; GET / HTTP 200.
+Synthetic data only; automated tests use temporary SQLite DBs and fixed clocks.
+Dependency caveat: shared-environment pip check finds unrelated MoviePy/Pillow conflict. Isolated installation was blocked by unavailable package-index DNS; see dependency_environment_note.md.

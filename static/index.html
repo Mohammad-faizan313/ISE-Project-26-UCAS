@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clinic Arrival & Queue — A4 Prototype</title>
+  <style>
+    :root { color-scheme: light; --ink:#183247; --muted:#5c6b78; --line:#d8e1e8; --brand:#17678a; --soft:#f3f7fa; --ok:#176a46; --bad:#a83232; }
+    * { box-sizing:border-box } body { margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif; color:var(--ink); background:#edf3f7 }
+    header { background:#123d57; color:white; padding:24px max(20px,calc((100vw - 1080px)/2)) }
+    header h1 { margin:0 0 4px; font-size:1.55rem } header p { margin:0; color:#d8e7ef }
+    main { max-width:1080px; margin:24px auto; padding:0 18px 40px; display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)) }
+    .card { background:white; border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:0 4px 16px #1832470b }
+    h2 { font-size:1.1rem; margin:0 0 12px } label { display:block; font-size:.9rem; font-weight:650; margin:12px 0 5px }
+    input,button { width:100%; font:inherit; border-radius:8px; padding:10px 12px } input { border:1px solid #b9c8d3; background:white }
+    button { border:0; background:var(--brand); color:white; font-weight:650; cursor:pointer; margin-top:12px }
+    button.secondary { background:#e8f1f6; color:#17445e; border:1px solid #c6d8e3 } button:disabled { opacity:.55; cursor:not-allowed }
+    .hint { color:var(--muted); font-size:.88rem } #message { grid-column:1/-1; padding:12px 16px; border-radius:9px; background:#e7f0f5; min-height:48px }
+    #message.error { background:#fff0ef; color:var(--bad) } #message.success { background:#e9f7ef; color:var(--ok) }
+    .ticket { border:1px dashed #8eb3c7; background:var(--soft); padding:12px; border-radius:10px; margin:10px 0 }
+    .ticket strong { font-size:1.3rem; letter-spacing:.04em } .row { display:flex; gap:10px } .row>* { flex:1 }
+    footer { max-width:1080px; margin:-20px auto 30px; padding:0 18px; color:var(--muted); font-size:.82rem }
+    @media(max-width:520px){.row{display:block}}
+  </style>
+</head>
+<body>
+<header><h1>Clinic Arrival & Queue</h1><p>Two-stage appointment prototype · booking, arrival confirmation and queue calling</p></header>
+<main>
+  <div id="message" role="status" aria-live="polite">Sign in with a demo account to begin. This is a synthetic coursework prototype.</div>
+  <section class="card">
+    <h2>1. Sign in</h2>
+    <label for="username">Demo username</label><input id="username" autocomplete="username" value="patient">
+    <label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Enter demo password">
+    <button id="loginBtn">Sign in</button>
+    <p class="hint">Demo patient and receptionist credentials are listed in the repository README. Never use these demo credentials outside a local demonstration.</p>
+    <p id="identity" class="hint">Not signed in.</p>
+    <button id="logoutBtn" class="secondary">Clear local session</button>
+  </section>
+  <section class="card">
+    <h2>2. Book an arrival window (patient)</h2>
+    <label for="clinic">Clinic code</label><input id="clinic" value="CLINIC-A" maxlength="20">
+    <div class="row"><div><label for="start">Window starts (ISO 8601)</label><input id="start" placeholder="2026-11-11T09:00:00+08:00"></div>
+    <div><label for="end">Window ends (ISO 8601)</label><input id="end" placeholder="2026-11-11T11:00:00+08:00"></div></div>
+    <button id="bookBtn">Create appointment</button>
+    <div id="appointmentResult" class="hint">No appointment created in this session.</div>
+  </section>
+  <section class="card">
+    <h2>3. Confirm arrival (patient)</h2>
+    <label for="appointmentId">Appointment ID</label><input id="appointmentId" inputmode="numeric" placeholder="ID returned after booking">
+    <label for="idempotency">Request key</label><input id="idempotency" value="checkin-demo-001">
+    <button id="checkinBtn">Check in and get queue ticket</button>
+    <div id="ticketResult" class="hint">The ticket is created only inside the booked window.</div>
+  </section>
+  <section class="card">
+    <h2>4. Reception queue (receptionist)</h2>
+    <label for="queueClinic">Clinic code</label><input id="queueClinic" value="CLINIC-A">
+    <button id="refreshBtn" class="secondary">Refresh queue</button>
+    <div id="queueResult" class="hint">Sign in as receptionist to view active tickets.</div>
+  </section>
+</main>
+<footer>Prototype boundary: no diagnosis, triage, medical-record integration, payments, messaging or production patient data. A real clinic would require approved policies, security, accessibility, privacy and operational review.</footer>
+<script>
+  let token = null, role = null, username = null;
+  const $ = id => document.getElementById(id);
+  function message(text, kind='') { $('message').textContent=text; $('message').className=kind; }
+  async function api(path, options={}) {
+    const headers = new Headers(options.headers || {});
+    if (token) headers.set('Authorization', `Bearer ${token}`);
+    if (options.body && !headers.has('Content-Type')) headers.set('Content-Type','application/json');
+    const response = await fetch(path,{...options,headers});
+    const data = await response.json().catch(()=>({detail:response.statusText}));
+    if (!response.ok) throw new Error(data.detail || `Request failed (${response.status})`);
+    return data;
+  }
+  $('loginBtn').addEventListener('click', async()=>{
+    try { const result=await api('/api/login',{method:'POST',body:JSON.stringify({username:$('username').value,password:$('password').value})});
+      token=result.access_token; role=result.user.role; username=result.user.username; $('identity').textContent=`Signed in as ${username} (${role})`; message('Sign-in successful.','success'); }
+    catch(e){message(e.message,'error');}
+  });
+  $('logoutBtn').addEventListener('click',()=>{token=null;role=null;username=null;$('identity').textContent='Not signed in.';message('Local session cleared.');});
+  $('bookBtn').addEventListener('click',async()=>{
+    try { const a=await api('/api/appointments',{method:'POST',body:JSON.stringify({clinic_code:$('clinic').value,window_start:$('start').value,window_end:$('end').value})});
+      $('appointmentId').value=a.id; $('appointmentResult').textContent=`Appointment #${a.id}: ${a.state}, ${a.window_start} to ${a.window_end}`; message('Appointment created. Save the appointment ID.','success'); }
+    catch(e){message(e.message,'error');}
+  });
+  $('checkinBtn').addEventListener('click',async()=>{
+    try { const id=$('appointmentId').value.trim(); if(!id) throw new Error('Enter an appointment ID.');
+      const result=await api(`/api/appointments/${encodeURIComponent(id)}/check-in`,{method:'POST',headers:{'Idempotency-Key':$('idempotency').value},body:JSON.stringify({})});
+      $('ticketResult').innerHTML=''; const box=document.createElement('div'); box.className='ticket';
+      const strong=document.createElement('strong'); strong.textContent=result.ticket.queue_number; box.append(strong,document.createElement('br'),document.createTextNode(`Status: ${result.ticket.state} · Ticket ID: ${result.ticket.id}`)); $('ticketResult').append(box); message('Arrival confirmed. Your queue ticket has been issued.','success'); }
+    catch(e){message(e.message,'error');}
+  });
+  $('refreshBtn').addEventListener('click',async()=>{
+    try { const data=await api(`/api/staff/queue?clinic_code=${encodeURIComponent($('queueClinic').value)}`); $('queueResult').innerHTML='';
+      if(!data.tickets.length){$('queueResult').textContent='No active tickets for this clinic today.';return;}
+      for(const t of data.tickets){const box=document.createElement('div');box.className='ticket'; const title=document.createElement('strong');title.textContent=t.queue_number;box.append(title,document.createElement('p'));box.lastChild.textContent=`${t.state} · Ticket #${t.id} · Version ${t.version}`;
+        if(t.state==='WAITING'){const b=document.createElement('button');b.textContent='Call patient';b.addEventListener('click',async()=>{try{await api(`/api/staff/tickets/${t.id}/call`,{method:'POST',headers:{'If-Match':String(t.version)},body:JSON.stringify({})});message(`${t.queue_number} called.`,'success');$('refreshBtn').click();}catch(e){message(e.message,'error');}});box.append(b);} $('queueResult').append(box); }
+      message('Queue refreshed.','success');
+    } catch(e){message(e.message,'error');}
+  });
+</script>
+</body></html>

@@ -1,0 +1,4 @@
+health={"status":"ok","service":"clinic-appointment-a4"}
+page_status=200
+UI title: Clinic Arrival & Queue — A4 Prototype
+Server process was stopped after the checks. This was a local-only smoke test.
