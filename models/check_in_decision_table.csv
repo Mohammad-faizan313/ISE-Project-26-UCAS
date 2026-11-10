@@ -1,0 +1,8 @@
+Priority,Appointment state,Current time condition,Decision,Side effect,Note
+1,CANCELLED,Any,REJECT_CANCELLED,No ticket,Closed state
+2,CHECKED_IN,Any,ALREADY_CHECKED_IN,No additional ticket,Idempotent repeat request
+3,NO_SHOW or COMPLETED,Any,REJECT_CLOSED,No ticket,Closed state
+4,CONFIRMED,Before window_start,TOO_EARLY,No ticket,No state mutation
+5,CONFIRMED,window_start <= now < window_end,ACCEPT_CHECK_IN,Accept check-in; ticket creation is a separate guarded operation,"Start inclusive, end exclusive"
+6,CONFIRMED,window_end <= now < window_end + grace,LATE_REVIEW,Requires approved staff/clinic path,Grace value configurable
+7,CONFIRMED,now >= window_end + grace,NO_SHOW_ELIGIBLE,No automatic NO_SHOW; authorised reconciliation required,"A threshold is eligibility, not proof of absence"

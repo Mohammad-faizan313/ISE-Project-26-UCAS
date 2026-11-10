@@ -1,0 +1,22 @@
+digraph A4CallPath {
+  rankdir=TB; graph [fontname="Arial", labelloc=t, label="A4 End-to-End Check-in and Queue Call Path", fontsize=17];
+  node [shape=box, style="rounded,filled", fillcolor="#eef5fa", color="#3e6b86", fontname="Arial", fontsize=10];
+  edge [color="#526d7a", fontname="Arial", fontsize=9];
+  a [label="Patient signs in\nPOST /api/login"];
+  b [label="Create appointment\nCONFIRMED"];
+  c [label="Patient checks in\nIdempotency-Key required"];
+  d [shape=diamond, label="Time in\n[start, end)?", fillcolor="#fff4df", color="#a47b36"];
+  e [label="Reject with 409\nNo state mutation", fillcolor="#fff0ef", color="#a83232"];
+  f [label="SQLite transaction\nUpdate appointment to CHECKED_IN\nInsert unique WAITING ticket\nStore replay response", fillcolor="#edf7ed", color="#50835a"];
+  g [label="Receptionist loads queue\nGET /api/staff/queue"];
+  h [label="Call ticket with If-Match\nWAITING → CALLED; version + 1"];
+  i [shape=diamond, label="Version\ncurrent?", fillcolor="#fff4df", color="#a47b36"];
+  j [label="412 stale version\nRefresh queue", fillcolor="#fff0ef", color="#a83232"];
+  k [label="200 updated ticket\nCALLED", fillcolor="#edf7ed", color="#50835a"];
+  a -> b -> c -> d;
+  d -> f [label="Yes"];
+  d -> e [label="No"];
+  f -> g -> h -> i;
+  i -> k [label="Yes"];
+  i -> j [label="No"];
+}

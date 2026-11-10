@@ -1,0 +1,26 @@
+flowchart TD
+  A[Patient selects service and arrival window] --> B{Window has capacity?}
+  B -- No --> C[Show alternatives or waitlist route]
+  B -- Yes --> D[AppointmentBooked / Confirmed]
+  D --> E{Patient cancels before attendance?}
+  E -- Yes --> F[AppointmentCancelled; record event]
+  E -- No --> G[Patient arrives at clinic]
+  G --> H[Check-in requested by kiosk or staff]
+  H --> I{Rule decision}
+  I -- Within window --> J[CheckInAccepted]
+  I -- Too early --> K[Explain policy / assisted route]
+  I -- Late --> L[LateArrivalReview]
+  I -- Grace elapsed --> M[No-show eligible; staff/policy resolution]
+  J --> N[QueueTicketIssued]
+  N --> O[PatientCalled]
+  O --> P[ConsultationStarted]
+  P --> Q[ConsultationCompleted]
+  F --> R[Audit trail updated]
+  K --> R
+  L --> R
+  M --> R
+  J --> R
+  N --> R
+  O --> R
+  P --> R
+  Q --> R

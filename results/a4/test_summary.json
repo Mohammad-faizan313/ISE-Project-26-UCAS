@@ -1,0 +1,14 @@
+{
+  "test_command": "python -m unittest discover -s tests -v",
+  "total_tests": 60,
+  "passed": 60,
+  "failures": 0,
+  "errors": 0,
+  "a2_domain_tests": 36,
+  "a4_api_tests": 24,
+  "python": "3.13.5",
+  "fastapi": "0.128.2",
+  "clinic_timezone": "Asia/Shanghai UTC+08:00",
+  "result": "OK",
+  "data": "synthetic only"
+}

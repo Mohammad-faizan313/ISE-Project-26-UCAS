@@ -1,0 +1,21 @@
+stateDiagram-v2
+  state "Appointment lifecycle" as A {
+    [*] --> Confirmed
+    Confirmed --> Cancelled: cancellation accepted
+    Confirmed --> CheckedIn: check-in accepted
+    Confirmed --> NoShow: authorised no-show recording after policy threshold
+    CheckedIn --> Completed: visit closed
+    Cancelled --> [*]
+    NoShow --> [*]
+    Completed --> [*]
+  }
+  state "Queue entry lifecycle (separate aggregate)" as Q {
+    [*] --> Waiting: one valid ticket issued
+    Waiting --> Called: authorised call-next action
+    Called --> InConsultation: clinician starts visit
+    InConsultation --> Finished: visit ends
+    Waiting --> Withdrawn: authorised withdrawal/correction
+    Called --> Waiting: clinician/staff returns patient to queue
+    Finished --> [*]
+    Withdrawn --> [*]
+  }

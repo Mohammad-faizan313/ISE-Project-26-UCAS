@@ -1,0 +1,11 @@
+flowchart TD
+  A[Patient signs in] --> B[Create appointment: CONFIRMED]
+  B --> C[Check in with Idempotency-Key]
+  C --> D{Within half-open arrival window?}
+  D -- No --> E[409; no mutation]
+  D -- Yes --> F[Atomic transaction: CHECKED_IN + one WAITING ticket + replay response]
+  F --> G[Receptionist views queue]
+  G --> H[Call ticket with If-Match version]
+  H --> I{Version current?}
+  I -- No --> J[412; refresh queue]
+  I -- Yes --> K[Ticket becomes CALLED]

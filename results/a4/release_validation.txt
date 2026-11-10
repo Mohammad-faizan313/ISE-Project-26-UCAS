@@ -1,0 +1,13 @@
+Release validation checklist
+[PASS] A2 baseline tag present: ise-a2-v1.0
+[PASS] A3 tag present: ise-a3-v1.0
+[PASS] A4 application modules present: app/main.py, static/index.html
+[PASS] A4 integration tests present: tests/test_vertical_slice.py (24 test methods)
+[PASS] A2 domain tests retained: tests/test_clinic_model.py (36 test methods)
+[PASS] A4 architecture and call-path source + PNG present
+[PASS] A4 notebook executed top-to-bottom
+[PASS] 60-test combined regression passed
+[PASS] local Uvicorn /health and / smoke checks returned HTTP 200
+[PASS] A1-A4 report documents available under report/
+[NOTE] No remote GitHub URL is embedded; use the real account URL after pushing.
+[NOTE] Dependency limitations retained in results/a4/dependency_environment_note.md.

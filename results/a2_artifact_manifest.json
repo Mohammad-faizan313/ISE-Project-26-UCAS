@@ -1,0 +1,13 @@
+{
+  "artifact": "ISE-A2 Domain Model and Testable Specification",
+  "prepared_date": "2026-10-12",
+  "tests_passed": 36,
+  "test_command": "python -m unittest discover -s tests -v",
+  "python_version": "3.13.5",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "synthetic_data_only": true,
+  "target_clinic_validated": false,
+  "github_remote_configured": false,
+  "local_git_tag_to_apply": "ise-a2-v1.0",
+  "tag": "ise-a2-v1.0"
+}

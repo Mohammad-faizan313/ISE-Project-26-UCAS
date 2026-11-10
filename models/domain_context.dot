@@ -1,0 +1,26 @@
+digraph G {
+  graph [rankdir=LR, bgcolor="white", pad="0.2", nodesep="0.35", ranksep="0.55", fontname="Arial", label="A2 Domain Context - proposed boundary", labelloc=t, fontsize=18];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=10, color="#50718d", fillcolor="#edf4f8", margin="0.12,0.09"];
+  edge [fontname="Arial", fontsize=8, color="#5d6a73", arrowsize=0.7];
+  patient [label="Patient / carer\nbook • cancel • check-in"];
+  kiosk [label="Kiosk / assisted desk\nrequest check-in"];
+  staff [label="Reception / authorised staff\nresolve exceptions"];
+  clinician [label="Clinician\ncall • start • complete"];
+  manager [label="Clinic manager\nset windows and policy"];
+  config [label="Clinic configuration\nwindows • services • capacity", fillcolor="#e3f2eb", color="#4e8b72"];
+  system [label="Appointment + Queue Context\nbooking status • ticket • events", fillcolor="#dfeafa", color="#3f6b9a", penwidth=1.8];
+  board [label="Staff dashboard\ncurrent queue state"];
+  display [label="Patient display\nnumber / status"];
+  audit [label="Restricted audit store\nminimal append-only events"];
+  emr [label="Clinical record / diagnosis\nOUT OF SCOPE", fillcolor="#fff1eb", color="#bc725b", style="rounded,dashed,filled"];
+  patient -> system [label="booking / cancel"];
+  kiosk -> system [label="check-in command"];
+  staff -> system [label="assisted check-in / decision"];
+  clinician -> system [label="visit transitions"];
+  manager -> config [label="approved policy"];
+  config -> system [label="configured windows"];
+  system -> board;
+  system -> display;
+  system -> audit [label="auditable events"];
+  emr -> system [style=dashed, arrowhead=tee, label="no clinical data ingestion"];
+}

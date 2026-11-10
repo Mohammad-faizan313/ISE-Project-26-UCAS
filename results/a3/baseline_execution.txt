@@ -1,0 +1,52 @@
+A3 baseline identity
+commit: e8612772f9a145de60bbaf288b43950ae64d59d6
+tag: ise-a2-v1.0
+
+python --version
+Python 3.13.5
+
+python -m compileall -q src tests
+compileall exit: 0
+
+python -m unittest discover -s tests -v
+test_cancelled_rejected (test_clinic_model.TestCheckInDecisionTable.test_cancelled_rejected) ... ok
+test_completed_is_closed (test_clinic_model.TestCheckInDecisionTable.test_completed_is_closed) ... ok
+test_grace_threshold_makes_no_show_eligible_not_automatic (test_clinic_model.TestCheckInDecisionTable.test_grace_threshold_makes_no_show_eligible_not_automatic) ... ok
+test_inside_window_accepted (test_clinic_model.TestCheckInDecisionTable.test_inside_window_accepted) ... ok
+test_naive_current_time_raises (test_clinic_model.TestCheckInDecisionTable.test_naive_current_time_raises) ... ok
+test_negative_grace_raises (test_clinic_model.TestCheckInDecisionTable.test_negative_grace_raises) ... ok
+test_pre_grace_end_routes_to_late_review (test_clinic_model.TestCheckInDecisionTable.test_pre_grace_end_routes_to_late_review) ... ok
+test_repeat_checkin_is_idempotent_decision (test_clinic_model.TestCheckInDecisionTable.test_repeat_checkin_is_idempotent_decision) ... ok
+test_start_boundary_accepted (test_clinic_model.TestCheckInDecisionTable.test_start_boundary_accepted) ... ok
+test_too_early (test_clinic_model.TestCheckInDecisionTable.test_too_early) ... ok
+test_window_end_routes_to_late_review (test_clinic_model.TestCheckInDecisionTable.test_window_end_routes_to_late_review) ... ok
+test_contains_uses_start_inclusive_end_exclusive (test_clinic_model.TestInvariantI1Window.test_contains_uses_start_inclusive_end_exclusive) ... ok
+test_naive_timestamp_rejected (test_clinic_model.TestInvariantI1Window.test_naive_timestamp_rejected) ... ok
+test_reversed_window_rejected (test_clinic_model.TestInvariantI1Window.test_reversed_window_rejected) ... ok
+test_valid_positive_window (test_clinic_model.TestInvariantI1Window.test_valid_positive_window) ... ok
+test_zero_length_window_rejected (test_clinic_model.TestInvariantI1Window.test_zero_length_window_rejected) ... ok
+test_checkedin_with_timestamp_is_valid (test_clinic_model.TestInvariantI2AppointmentCoherence.test_checkedin_with_timestamp_is_valid) ... ok
+test_checkedin_without_timestamp_violates (test_clinic_model.TestInvariantI2AppointmentCoherence.test_checkedin_without_timestamp_violates) ... ok
+test_confirmed_without_checkin_is_valid (test_clinic_model.TestInvariantI2AppointmentCoherence.test_confirmed_without_checkin_is_valid) ... ok
+test_noshow_after_grace_without_checkin_is_coherent (test_clinic_model.TestInvariantI2AppointmentCoherence.test_noshow_after_grace_without_checkin_is_coherent) ... ok
+test_noshow_before_grace_violates (test_clinic_model.TestInvariantI2AppointmentCoherence.test_noshow_before_grace_violates) ... ok
+test_noshow_with_checkin_violates (test_clinic_model.TestInvariantI2AppointmentCoherence.test_noshow_with_checkin_violates) ... ok
+test_queue_number_unique_per_session (test_clinic_model.TestInvariantI3Tickets.test_queue_number_unique_per_session) ... ok
+test_single_active_ticket_has_no_duplicate_violation (test_clinic_model.TestInvariantI3Tickets.test_single_active_ticket_has_no_duplicate_violation) ... ok
+test_ticket_issuance_allowed_once_after_checkin (test_clinic_model.TestInvariantI3Tickets.test_ticket_issuance_allowed_once_after_checkin) ... ok
+test_ticket_issuance_requires_accepted_checkin (test_clinic_model.TestInvariantI3Tickets.test_ticket_issuance_requires_accepted_checkin) ... ok
+test_two_active_tickets_for_one_booking_violate (test_clinic_model.TestInvariantI3Tickets.test_two_active_tickets_for_one_booking_violate) ... ok
+test_withdrawn_ticket_does_not_count_as_active (test_clinic_model.TestInvariantI3Tickets.test_withdrawn_ticket_does_not_count_as_active) ... ok
+test_authorized_after_threshold_allowed (test_clinic_model.TestInvariantI4NoShowAuthorization.test_authorized_after_threshold_allowed) ... ok
+test_before_threshold_not_allowed (test_clinic_model.TestInvariantI4NoShowAuthorization.test_before_threshold_not_allowed) ... ok
+test_checkedin_appointment_cannot_be_noshow (test_clinic_model.TestInvariantI4NoShowAuthorization.test_checkedin_appointment_cannot_be_noshow) ... ok
+test_unauthorized_role_not_allowed (test_clinic_model.TestInvariantI4NoShowAuthorization.test_unauthorized_role_not_allowed) ... ok
+test_called_back_to_waiting_allowed_as_recall_correction (test_clinic_model.TestInvariantI5TicketTransitions.test_called_back_to_waiting_allowed_as_recall_correction) ... ok
+test_finished_to_waiting_forbidden (test_clinic_model.TestInvariantI5TicketTransitions.test_finished_to_waiting_forbidden) ... ok
+test_waiting_to_called_allowed (test_clinic_model.TestInvariantI5TicketTransitions.test_waiting_to_called_allowed) ... ok
+test_withdrawn_is_terminal (test_clinic_model.TestInvariantI5TicketTransitions.test_withdrawn_is_terminal) ... ok
+
+----------------------------------------------------------------------
+Ran 36 tests in 0.001s
+
+OK

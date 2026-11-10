@@ -1,0 +1,58 @@
+{
+  "artifact": "ISE-A2 Domain Model and Testable Specification",
+  "run_date": "2026-10-12",
+  "data_kind": "synthetic deterministic fixtures only",
+  "python_version": "3.13.5",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "command": "python -m unittest discover -s tests -v",
+  "exit_code": 0,
+  "summary_lines": [
+    "Ran 36 tests in 0.002s",
+    "OK"
+  ],
+  "boundary_cases": [
+    {
+      "case": "one minute before start",
+      "time": "2026-10-12T08:59:00+08:00",
+      "expected": "TOO_EARLY",
+      "actual": "TOO_EARLY",
+      "passed": true
+    },
+    {
+      "case": "exactly at start",
+      "time": "2026-10-12T09:00:00+08:00",
+      "expected": "ACCEPT_CHECK_IN",
+      "actual": "ACCEPT_CHECK_IN",
+      "passed": true
+    },
+    {
+      "case": "inside window",
+      "time": "2026-10-12T10:15:00+08:00",
+      "expected": "ACCEPT_CHECK_IN",
+      "actual": "ACCEPT_CHECK_IN",
+      "passed": true
+    },
+    {
+      "case": "exactly at end",
+      "time": "2026-10-12T11:00:00+08:00",
+      "expected": "LATE_REVIEW",
+      "actual": "LATE_REVIEW",
+      "passed": true
+    },
+    {
+      "case": "inside grace",
+      "time": "2026-10-12T11:14:00+08:00",
+      "expected": "LATE_REVIEW",
+      "actual": "LATE_REVIEW",
+      "passed": true
+    },
+    {
+      "case": "at grace threshold",
+      "time": "2026-10-12T11:15:00+08:00",
+      "expected": "NO_SHOW_ELIGIBLE",
+      "actual": "NO_SHOW_ELIGIBLE",
+      "passed": true
+    }
+  ],
+  "interpretation": "Passing tests indicate conformance of this reference model to the implemented examples; they do not establish clinic policy, operational performance, legal compliance or production readiness."
+}

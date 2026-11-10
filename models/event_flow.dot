@@ -1,0 +1,21 @@
+digraph G {
+  graph [rankdir=TB, bgcolor="white", pad="0.15", nodesep="0.22", ranksep="0.32", fontname="Arial", label="Process / Event Flow - candidate policy", labelloc=t, fontsize=18];
+  node [shape=box, style="rounded,filled", fontname="Arial", fontsize=9, color="#50718d", fillcolor="#edf4f8", margin="0.10,0.07"];
+  edge [fontname="Arial", fontsize=8, color="#5d6a73", arrowsize=0.7];
+  a [label="Patient selects service + window"];
+  b [shape=diamond, label="Window has capacity?", fillcolor="#fff6df", color="#b9974d"];
+  c [label="Offer alternatives / waitlist", fillcolor="#fff1eb", color="#bc725b"];
+  d [label="AppointmentBooked\nstatus = Confirmed", fillcolor="#e3f2eb", color="#4e8b72"];
+  e [shape=diamond, label="Cancellation?", fillcolor="#fff6df", color="#b9974d"];
+  f [label="AppointmentCancelled\nrelease per policy"];
+  g [label="Patient arrives and requests check-in"];
+  h [shape=diamond, label="Decision rule", fillcolor="#fff6df", color="#b9974d"];
+  j [label="CheckInAccepted\nQueueTicketIssued", fillcolor="#e3f2eb", color="#4e8b72"];
+  k [label="Too early\nexplain policy / assist"];
+  l [label="Late review\nauthorised decision"];
+  m [label="No-show eligible\nreconciliation, not automatic"];
+  n [label="PatientCalled → ConsultationStarted → Completed"];
+  audit [label="Append audit event for accepted or rejected action", fillcolor="#e5e7eb", color="#6b7280"];
+  a -> b; b -> c [label="No"]; b -> d [label="Yes"]; d -> e; e -> f [label="Yes"]; e -> g [label="No"]; g -> h; h -> j [label="in window"]; h -> k [label="early"]; h -> l [label="late"] ; h -> m [label="grace elapsed"]; j -> n;
+  f -> audit; j -> audit; k -> audit; l -> audit; m -> audit; n -> audit;
+}

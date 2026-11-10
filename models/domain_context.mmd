@@ -1,0 +1,11 @@
+flowchart LR
+  Patient[Patient / carer] -->|booking request, cancel, check-in request| Booking[Appointment & Queue Context]
+  Kiosk[Clinic kiosk] -->|untrusted check-in command| Booking
+  Staff[Receptionist / authorised staff] -->|assisted check-in, exception decision| Booking
+  Clinician[Doctor / nurse] -->|call next, consultation start / complete| Booking
+  Manager[Clinic manager] -->|capacity, window, grace and queue policies| Config[Clinic Configuration]
+  Config --> Booking
+  Booking -->|minimal display / queue state| StaffBoard[Staff Dashboard]
+  Booking -->|ticket number / status| PatientDisplay[Patient-facing display]
+  Booking -->|minimised audit events| Audit[Restricted Audit Store]
+  ClinicalRecord[Clinical record / diagnosis / treatment] -. excluded from this prototype .-> Booking
